@@ -1,93 +1,68 @@
 package org.example;
 import java.util.ArrayList;
-import java.util.List;
 
+import java.util.ArrayList;
 
-public class Main {
+class SortedStringArray {
+    private ArrayList<String> strings;
+
+    public SortedStringArray() {
+
+        strings = new ArrayList<>();
+    }
+
+    public void add(String string) {
+        strings.add(string);
+
+        for (int i = 0; i < strings.size() - 1; i++) {
+            for (int j = 0; j < strings.size() - i - 1; j++) {
+                if (strings.get(j).length() > strings.get(j + 1).length()) {
+                    String temp = strings.get(j);
+                    strings.set(j, strings.get(j + 1));
+                    strings.set(j + 1, temp);
+                }
+            }
+        }
+    }
+
+    public String getMaxLengthString() {
+        if (strings.isEmpty()) {
+            return null;
+        }
+        String maxLengthString = strings.get(0);
+        for (String s : strings) {
+            if (s.length() > maxLengthString.length()) {
+                maxLengthString = s;
+            }
+        }
+        return maxLengthString;
+    }
+
+    public double getAverageLength() {
+
+        if (strings.isEmpty()) {
+            return 0;
+        }
+        int totalLength = strings.stream().mapToInt(String::length).sum();
+        return (double) totalLength / strings.size();
+    }
+
     public static void main(String[] args) {
+        SortedStringArray arr = new SortedStringArray();
 
-        Student first = new Student("Artem", "Shendarov");
-        Teacher teacher = new Teacher("Pavel", "Panilov", new ArrayList<>());
-        teacher.addCourse("Methots of algoritmisation");
-        Teacher secteacher = new Teacher("Artem", "Nikolaev", new ArrayList<>());
-        secteacher.addCourse("Computer Science");
-        first.setTutor(teacher);
-        List<People> p = new ArrayList<>();
-        p.add(first);
-        p.add(teacher);
-        for (People pp: p) {
-            System.out.println(pp);
-        }
+        arr.add("BMW");
+        arr.add("Ferrari");
+        arr.add("Lamborghini");
+        arr.add("Mercedes");
+
+        System.out.println("Compare massive: " + arr.strings);
+
+        System.out.println("Max length's string: " + arr.getMaxLengthString());
+
+        System.out.println("Average strings length: " + arr.getAverageLength());
     }
 }
 
-abstract class People {
-    String Name;
-    String Surname;
-
-    public People(String name, String surname) {
-        this.Surname = surname;
-        this.Name = name;
-    }
-}
-
-class Student extends People {
-
-    private Teacher Tutor;
-
-    public Student(String name, String surname) {
-        super(name, surname);
-    }
-
-    @Override
-    public String toString() {
-        return "Student{" +
-                "Tutor=" + Tutor +
-                ", Name='" + Name + '\'' +
-                ", Surname='" + Surname + '\'' +
-                '}';
-    }
-
-    public void setTutor(Teacher tutor) {
-        if (this.Tutor != null) {
-            throw new IllegalStateException("Student already have tutor" + this.Tutor);
-
-        } else {
-            this.Tutor = tutor;
-        }
-    }
-}
-
-class Teacher extends People{
-    private List<String> Courses;
-    public Teacher (String name, String surname, List<String> courses) {
-        super(name, surname);
-        this.Courses = new ArrayList<String>(courses);
-    }
 
 
-    public List<String> getCourse() {
-        return this.Courses;
-    }
 
-    public void setCourse(List<String> courses) {
-        this.Courses = courses;
-    }
-
-    public void addCourse (String course) {;
-        this.Courses.add(course);
-    }
-
-    public void removeCourse (String course) {
-        this.Courses.remove(course);
-    }
-
-    @Override
-    public String toString() {
-        return "Teacher{" +
-                "Courses=" + Courses +
-                ", Name='" + Name + '\'' +
-                ", Surname='" + Surname + '\'' +
-                '}';
-    }
-}
